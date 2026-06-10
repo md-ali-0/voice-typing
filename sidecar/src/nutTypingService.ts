@@ -76,7 +76,7 @@ function pasteWithPowerShell(text: string): Promise<void> {
   const encodedText = Buffer.from(text, 'utf16le').toString('base64');
   const script = [
     'Add-Type -AssemblyName System.Windows.Forms;',
-    '$text = [Text.Encoding]::Unicode.GetString([Convert]::FromBase64String($args[0]));',
+    `$text = [Text.Encoding]::Unicode.GetString([Convert]::FromBase64String('${encodedText}'));`,
     'Set-Clipboard -Value $text;',
     'Start-Sleep -Milliseconds 90;',
     '[System.Windows.Forms.SendKeys]::SendWait("^v");'
@@ -85,7 +85,7 @@ function pasteWithPowerShell(text: string): Promise<void> {
   return new Promise((resolve, reject) => {
     const child = spawn(
       'powershell.exe',
-      ['-NoProfile', '-Sta', '-ExecutionPolicy', 'Bypass', '-Command', script, encodedText],
+      ['-NoProfile', '-Sta', '-ExecutionPolicy', 'Bypass', '-Command', script],
       {
         stdio: ['pipe', 'pipe', 'pipe'],
         windowsHide: true

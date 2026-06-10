@@ -33,7 +33,7 @@ export class SpeechRecognitionService {
 
   start(): void {
     if (!SpeechRecognitionService.isSupported()) {
-      this.options.onError('Speech recognition is unavailable in this WebView.');
+      this.options.onError('Speech recognition is unavailable in this WebView.', true);
       return;
     }
 
